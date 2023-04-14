@@ -1,5 +1,6 @@
 import EditableContent from './EditableContent';
 import RevisionList from './RevisionList';
+import ReactMarkdown from 'react-markdown';
 
 type Props = {
   title: string;
@@ -18,7 +19,7 @@ export default function Article({ title, data, editable }: Props) {
         <EditableContent title={title} data={data} />
       ) : (
         <section>
-          <p>{data}</p>
+          <ReactMarkdown>{data}</ReactMarkdown>
         </section>
       )}
 
