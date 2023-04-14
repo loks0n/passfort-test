@@ -17,7 +17,7 @@ export async function fetchPages() {
 
 export default function Home() {
   const { error, isLoading, data } = useQuery<PageData, Error>(
-    'pages',
+    'all_pages',
     fetchPages
   );
 

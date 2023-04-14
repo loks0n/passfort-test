@@ -8,9 +8,9 @@ type PageResponse = {
   data: string;
 };
 
-export async function fetchPageLatest(pageTitle: string) {
+export async function fetchPageRevision(pageTitle: string, timestamp: string) {
   const res = await fetch(
-    `${import.meta.env.VITE_PAGES_API}/page/${pageTitle}/latest`
+    `${import.meta.env.VITE_PAGES_API}/page/${pageTitle}/${timestamp}`
   );
 
   if (!res.ok) {
@@ -23,15 +23,15 @@ export async function fetchPageLatest(pageTitle: string) {
 }
 
 export default function Home() {
-  const { pageTitle } = useParams();
+  const { pageTitle, timestamp } = useParams();
 
-  if (!pageTitle) {
+  if (!pageTitle || !timestamp) {
     return <p>Page not found!</p>;
   }
 
   const { isLoading, error, data } = useQuery<PageResponse, Error>(
-    ['page_latest', pageTitle],
-    async () => await fetchPageLatest(pageTitle!)
+    ['page_revision', pageTitle, timestamp],
+    async () => await fetchPageRevision(pageTitle, timestamp)
   );
 
   if (isLoading) {
@@ -42,5 +42,5 @@ export default function Home() {
     return <p>{error.message}</p>;
   }
 
-  return <Article title={data!.title} data={data!.data} editable />;
+  return <Article title={data!.title} data={data!.data} />;
 }

@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 
 type Props = {
   title: string;
@@ -24,19 +25,28 @@ export async function fetchPageRevisions(pageTitle: string) {
 
 export default function RevisionList({ title }: Props) {
   const { isLoading, error, data } = useQuery<PageRevisionsResponse, Error>(
-    ['page_revisions', title],
+    ['page_all_revisions', title],
     async () => await fetchPageRevisions(title)
   );
 
-  return isLoading ? (
-    <p>Loading...</p>
-  ) : error ? (
-    <p>{error.message}</p>
-  ) : (
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
+  return (
     <ul data-testid="page-revision-list">
-      {Object.entries(data!.revisions).map(([revision]) => (
-        <li key={revision} data-testid="page-revision-link">
-          Revision #{revision}
+      {Object.entries(data!.revisions).map(([revision, timestamp]) => (
+        <li key={revision}>
+          <Link
+            to={`/page/${title}/${timestamp}`}
+            data-testid="page-revision-link"
+          >
+            Revision #{revision}
+          </Link>
         </li>
       ))}
     </ul>

@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 import Home from './routes/Home';
 import PageDetail from './routes/PageDetail';
+import PageRevisionDetail from './routes/PageRevisionDetail';
 import NotFound from './routes/NotFound';
 import MainLayout from './components/layouts/MainLayout';
 
@@ -15,6 +16,7 @@ export function App() {
         <Route index element={<Home />} />
         <Route path="page/:pageTitle">
           <Route index element={<PageDetail />} />
+          <Route path=":timestamp" element={<PageRevisionDetail />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
