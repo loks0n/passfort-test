@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import EditableArticlePage from '../components/article/EditableArticle';
 
-type Page = {
+type PageResponse = {
   title: string;
   data: string;
 };
@@ -19,22 +19,25 @@ export async function fetchPageLatest(pageTitle: string) {
     );
   }
 
-  return res.json() as Promise<Page>;
+  return res.json() as Promise<PageResponse>;
 }
 
 export default function Home() {
   const { pageTitle } = useParams();
 
-  const { error, isLoading, data } = useQuery<Page, Error>(
-    ['page', pageTitle],
+  const latestPage = useQuery<PageResponse, Error>(
+    ['page_latest', pageTitle],
     async () => await fetchPageLatest(pageTitle!)
   );
 
-  return isLoading ? (
+  return latestPage.isLoading ? (
     <p>Loading...</p>
-  ) : error ? (
-    <p>{error.message}</p>
+  ) : latestPage.error ? (
+    <p>{latestPage.error.message}</p>
   ) : (
-    <EditableArticlePage title={data!.title} data={data!.data} />
+    <EditableArticlePage
+      title={latestPage.data!.title}
+      data={latestPage.data!.data}
+    />
   );
 }

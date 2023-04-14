@@ -26,3 +26,13 @@ test('can edit page', async ({ page }) => {
   await editedText.waitFor();
   await expect(editedText).toBeVisible();
 });
+
+test('has page revisions', async ({ page }) => {
+  await page.goto('/page/hello');
+  await page.getByTestId('page-revision-list').waitFor();
+
+  const pageLinks = page.getByTestId('page-revision-link');
+  const pageLinksCount = await pageLinks.count();
+
+  await expect(pageLinksCount).toBeGreaterThan(0);
+});
