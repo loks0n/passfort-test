@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 import { useParams } from 'react-router-dom';
-import ArticlePage from '../components/article/ArticlePage';
+import EditableArticlePage from '../components/article/EditableArticle';
 
 type Page = {
   title: string;
@@ -14,7 +14,9 @@ export async function fetchPageLatest(pageTitle: string) {
   );
 
   if (!res.ok) {
-    throw new Error('Unable to fetch data from pages API');
+    throw new Error(
+      `Failed to fetch latest page '${pageTitle}'  from pages API`
+    );
   }
 
   return res.json() as Promise<Page>;
@@ -33,6 +35,6 @@ export default function Home() {
   ) : error ? (
     <p>{error.message}</p>
   ) : (
-    <ArticlePage title={data!.title} data={data!.data} />
+    <EditableArticlePage title={data!.title} data={data!.data} />
   );
 }
