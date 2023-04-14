@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 
 type Props = {
@@ -31,25 +32,30 @@ export default function EditableContent({ title, data }: Props) {
     onSuccess: () => {
       queryClient.invalidateQueries(['page_latest', title]);
       queryClient.invalidateQueries(['page_all_revisions', title]);
+      toast.success('New revision saved!');
+    },
+    onError(error) {
+      toast.error(`Something went wrong: ${error.message}`);
     },
     onSettled: () => setIsEditing(false),
   });
 
   return (
     <section>
-      {error && <p>{error.message}</p>}
       {isEditing ? (
         <>
           <textarea value={value} onChange={(e) => setValue(e.target.value)} />
-          <button
-            aria-busy={isLoading}
-            onClick={() => {
-              mutate(value);
-            }}
-          >
-            Save
-          </button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
+          <div className="grid">
+            <button onClick={() => setIsEditing(false)}>Cancel</button>
+            <button
+              aria-busy={isLoading}
+              onClick={() => {
+                mutate(value);
+              }}
+            >
+              Save
+            </button>
+          </div>
         </>
       ) : (
         <>
