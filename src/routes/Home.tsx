@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
 
 type PageData = {
   titles: string[];
@@ -33,8 +34,10 @@ export default function Home() {
       ) : (
         <ul data-testid="page-link-list">
           {data?.titles.map((title) => (
-            <li data-testid="page-link" key={title}>
-              {title}
+            <li key={title}>
+              <Link to={`/page/${title}`} data-testid="page-link">
+                {title}
+              </Link>
             </li>
           ))}
         </ul>

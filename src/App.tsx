@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import Home from './routes/Home';
+import PageDetail from './routes/PageDetail';
 import NotFound from './routes/NotFound';
 import MainLayout from './components/layouts/MainLayout';
 
@@ -12,6 +13,9 @@ export function App() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
+        <Route path="page/:pageTitle">
+          <Route index element={<PageDetail />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
