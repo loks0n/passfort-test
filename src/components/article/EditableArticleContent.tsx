@@ -36,11 +36,7 @@ export function EditableArticleContent({ title, data, onSave }: Props) {
   return (
     <div>
       {error && <p>{error.message}</p>}
-      <input
-        type="textarea"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <textarea value={value} onChange={(e) => setValue(e.target.value)} />
       <button
         aria-busy={isLoading}
         onClick={() => {
