@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
+import styles from './RevisionList.module.css';
 
 type Props = {
   title: string;
@@ -15,9 +16,7 @@ export async function fetchPageRevisions(pageTitle: string) {
   );
 
   if (!res.ok) {
-    throw new Error(
-      `Failed to fetch page revsions '${pageTitle}'  from pages API`
-    );
+    throw new Error(`Failed to fetch page revisions '${pageTitle}'.`);
   }
 
   return res.json() as Promise<PageRevisionsResponse>;
@@ -38,17 +37,25 @@ export default function RevisionList({ title }: Props) {
   }
 
   return (
-    <ul data-testid="page-revision-list">
-      {Object.entries(data!.revisions).map(([revision, timestamp]) => (
-        <li key={revision}>
-          <Link
-            to={`/page/${title}/${timestamp}`}
-            data-testid="page-revision-link"
-          >
-            Revision #{revision}
+    <>
+      <h3>Revisions</h3>
+      <ul className={styles['revision-list']} data-testid="page-revision-list">
+        {Object.entries(data!.revisions).map(([revision, timestamp]) => (
+          <li key={revision}>
+            <Link
+              to={`/page/${title}/${timestamp}`}
+              data-testid="page-revision-link"
+            >
+              #{revision}
+            </Link>
+          </li>
+        ))}
+        <li>
+          <Link to={`/page/${title}`} data-testid="page-revision-link">
+            Latest
           </Link>
         </li>
-      ))}
-    </ul>
+      </ul>
+    </>
   );
 }

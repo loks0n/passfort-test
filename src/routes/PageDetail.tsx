@@ -13,10 +13,12 @@ export async function fetchPageLatest(pageTitle: string) {
     `${import.meta.env.VITE_PAGES_API}/page/${pageTitle}/latest`
   );
 
+  if (res.status === 404) {
+    throw new Error(`Page '${pageTitle}' not found`);
+  }
+
   if (!res.ok) {
-    throw new Error(
-      `Failed to fetch latest page '${pageTitle}'  from pages API`
-    );
+    throw new Error(`Oops, something went wrong.`);
   }
 
   return res.json() as Promise<PageResponse>;
@@ -26,13 +28,14 @@ export default function Home() {
   const { pageTitle } = useParams();
 
   if (!pageTitle) {
-    return <p>Page not found!</p>;
+    return <p>Page '{pageTitle}' not found!</p>;
   }
 
-  const { isLoading, error, data } = useQuery<PageResponse, Error>(
-    ['page_latest', pageTitle],
-    async () => await fetchPageLatest(pageTitle!)
-  );
+  const { isLoading, error, data } = useQuery<PageResponse, Error>({
+    queryKey: ['page_latest', pageTitle],
+    queryFn: async () => await fetchPageLatest(pageTitle!),
+    retry: false,
+  });
 
   if (isLoading) {
     return <p>Loading...</p>;
