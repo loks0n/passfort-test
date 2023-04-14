@@ -1,8 +1,11 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
+import Home from './routes/Home';
+import NotFound from './routes/NotFound';
 import MainLayout from './components/layouts/MainLayout';
+
+const queryClient = new QueryClient();
 
 export function App() {
   return (
@@ -17,8 +20,10 @@ export function App() {
 
 export function WrappedApp() {
   return (
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }

@@ -3,11 +3,11 @@
 ## Setup
 First, install node modules
 ```shell
-npm i
+npm install
 ```
 
 
 To run the production build with
 ```shell
-npm run preview
+npm run dev
 ```

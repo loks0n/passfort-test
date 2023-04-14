@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import getPort from 'get-port';
 
 export default defineConfig({
   testDir: './e2e',
@@ -8,7 +9,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: `http://localhost:5177`,
     trace: 'on-first-retry',
   },
 
@@ -18,10 +19,4 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-
-  webServer: {
-    command: process.env.CI ? 'vite preview --port 5173' : 'vite dev',
-    port: 5173,
-    reuseExistingServer: !process.env.CI,
-  },
 });
